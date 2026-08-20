@@ -1,3 +1,130 @@
+function kwh_wait(int_wait_time) {
+    return new Promise(function (resolve, reject) {
+        try {
+            setTimeout(() => {
+                resolve();
+            }, int_wait_time)
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+function kwh_wait_for_element({
+    arr_iframe_seq,
+    str_selector,
+    int_retries,
+    int_wait_time
+}) {
+    return new Promise(function (resolve, reject) {
+        try {
+            let dom = kwh_get_elem({
+                arr_iframe_seq,
+                str_selector
+            })
+            if (dom) {
+                resolve(dom);
+            } else {
+                kwh_wait_for_element_waiter();
+            }
+            function kwh_wait_for_element_waiter() {
+                if (int_retries > 0) {
+                    int_retries--;
+                    setTimeout(function () {
+                        dom = kwh_wait_for_element_waiter();
+                    }, int_wait_time);
+                } else {
+                    console.log("Element not found after waiting.");
+                    reject();
+                }
+                setTimeout(function () {
+                    dom = kwh_get_elem({
+                        arr_iframe_seq,
+                        str_selector
+                    })
+                    if (dom) {
+                        resolve(dom);
+                    } else {
+                        kwh_wait_for_element_waiter();
+                    }
+                }, int_wait_time)
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+function kwh_wait_for_input_value({
+    dom,
+    str_text,
+    int_retries,
+    int_wait_time
+}) {
+    return new Promise(function (resolve, reject) {
+        try {
+            let str_dom_text = dom.value;
+            if (str_dom_text.toLowerCase() == str_text.toLowerCase()) {
+                resolve();
+            } else {
+                kwh_wait_for_input_value();
+            }
+            function kwh_wait_for_input_value() {
+                if (int_retries > 0) {
+                    int_retries--;
+                    setTimeout(function () {
+                        str_dom_text = dom.value;
+                        if (str_dom_text.toLowerCase() == str_text.toLowerCase()) {
+                            resolve();
+                        } else {
+                            kwh_wait_for_input_value();
+                        }
+                    }, int_wait_time);
+                } else {
+                    console.log("Input text was not found on input.");
+                    reject();
+                }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+function kwh_wait_for_progress_bar({ int_retries, int_wait_time }) {
+    return new Promise(function (resolve, reject) {
+        try {
+            let dom_progress_bar = kwh_get_elem({
+                arr_iframe_seq: ["#e1menuAppIframe"],
+                str_selector: "td.af_progressIndicator_indeterminate"
+            })
+            if (dom_progress_bar.offsetWidth == 0) {
+                resolve();
+            } else {
+                kwh_wait_for_progress_bar_waiter()
+            }
+            function kwh_wait_for_progress_bar_waiter() {
+                if (int_retries == 0) {
+                    int_retries--;
+                    setTimeout(function () {
+                        if (dom_progress_bar.innerWidth == 0) {
+                            resolve();
+                        } else {
+                            kwh_wait_for_progress_bar_waiter()
+                        }
+                    }, int_wait_time)
+                } else {
+                    console.log("Progress bar did not finish after retrying.");
+                    reject();
+                }
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+
 function kwh_get_elem({ arr_iframe_seq, str_selector }) {
   try {
     let ctx = document;
