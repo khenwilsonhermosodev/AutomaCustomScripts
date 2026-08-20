@@ -70,7 +70,7 @@ function kwh_wait_for_progress_bar({ int_retries, int_wait_time }) {
                 kwh_wait_for_progress_bar_waiter()
             }
             function kwh_wait_for_progress_bar_waiter() {
-                if (int_retries == 0) {
+                if (int_retries > 0) {
                     int_retries--;
                     setTimeout(function () {
                         console.log(dom_progress_bar.offsetWidth);
