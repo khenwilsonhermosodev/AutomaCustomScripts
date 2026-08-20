@@ -55,42 +55,6 @@ function kwh_wait_for_element({
     })
 }
 
-function kwh_wait_for_input_value({
-    dom,
-    str_text,
-    int_retries,
-    int_wait_time
-}) {
-    return new Promise(function (resolve, reject) {
-        try {
-            let str_dom_text = dom.value;
-            if (str_dom_text.toLowerCase() == str_text.toLowerCase()) {
-                resolve();
-            } else {
-                kwh_wait_for_input_value();
-            }
-            function kwh_wait_for_input_value() {
-                if (int_retries > 0) {
-                    int_retries--;
-                    setTimeout(function () {
-                        str_dom_text = dom.value;
-                        if (str_dom_text.toLowerCase() == str_text.toLowerCase()) {
-                            resolve();
-                        } else {
-                            kwh_wait_for_input_value();
-                        }
-                    }, int_wait_time);
-                } else {
-                    console.log("Input text was not found on input.");
-                    reject();
-                }
-            }
-        } catch (error) {
-            reject(error);
-        }
-    })
-}
-
 function kwh_wait_for_progress_bar({ int_retries, int_wait_time }) {
     return new Promise(function (resolve, reject) {
         try {
