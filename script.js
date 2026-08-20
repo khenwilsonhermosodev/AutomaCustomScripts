@@ -62,7 +62,8 @@ function kwh_wait_for_progress_bar({ int_retries, int_wait_time }) {
                 arr_iframe_seq: ["#e1menuAppIframe"],
                 str_selector: "td.af_progressIndicator_indeterminate"
             })
-            console.log(dom_progress_bar.innerWidth);
+            console.log(dom_progress_bar);
+            console.log(dom_progress_bar.offsetWidth);
             if (dom_progress_bar.offsetWidth == 0) {
                 resolve();
             } else {
@@ -72,8 +73,8 @@ function kwh_wait_for_progress_bar({ int_retries, int_wait_time }) {
                 if (int_retries == 0) {
                     int_retries--;
                     setTimeout(function () {
-                        console.log(dom_progress_bar.innerWidth);
-                        if (dom_progress_bar.innerWidth == 0) {
+                        console.log(dom_progress_bar.offsetWidth);
+                        if (dom_progress_bar.offsetWidth == 0) {
                             resolve();
                         } else {
                             kwh_wait_for_progress_bar_waiter()
