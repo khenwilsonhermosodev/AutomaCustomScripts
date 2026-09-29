@@ -1,9 +1,6 @@
 function kwh_date_converter(value) {
-  // Handle numbers and numeric strings
-  if (!isNaN(value) && value !== "") {
-    const serial = Number(value);
-
-    const date = new Date((serial - 25569) * 86400 * 1000);
+  if (!isNaN(value) && Number(value) > 20000) {
+    const date = new Date((Number(value) - 25569) * 86400 * 1000);
 
     const mm = String(date.getMonth() + 1).padStart(2, "0");
     const dd = String(date.getDate()).padStart(2, "0");
@@ -12,10 +9,8 @@ function kwh_date_converter(value) {
     return `${mm}/${dd}/${yyyy}`;
   }
 
-  // Already a date string or something else
-  return value;
+  return null;
 }
-
 
 function kwh_wait(int_wait_time) {
     return new Promise(function (resolve, reject) {
