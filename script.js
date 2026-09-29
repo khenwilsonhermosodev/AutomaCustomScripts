@@ -1,3 +1,22 @@
+function kwh_date_converter(value) {
+  // Handle numbers and numeric strings
+  if (!isNaN(value) && value !== "") {
+    const serial = Number(value);
+
+    const date = new Date((serial - 25569) * 86400 * 1000);
+
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    const yyyy = date.getFullYear();
+
+    return `${mm}/${dd}/${yyyy}`;
+  }
+
+  // Already a date string or something else
+  return value;
+}
+
+
 function kwh_wait(int_wait_time) {
     return new Promise(function (resolve, reject) {
         try {
